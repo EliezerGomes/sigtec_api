@@ -1,0 +1,759 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model caixa {
+  CODIGO         Int       @id
+  EMISSAO        DateTime? @db.Date
+  DOC            String?   @db.VarChar(20)
+  FKPLANO        Int?
+  FKCONTA        Int?
+  HISTORICO      String?   @db.VarChar(50)
+  ENTRADA        Decimal?  @db.Decimal(15, 2)
+  SAIDA          Decimal?  @db.Decimal(15, 2)
+  SALDO          Decimal?  @db.Decimal(15, 2)
+  FKVENDA        Int?
+  FKCOMPRA       Int?
+  FKPAGAR        Int?
+  FKRECEBER      Int?
+  TRANSFERENCIA  Int?
+  BLOQUEADO      String?   @db.VarChar(1)
+  FK_CONTA1      Int?
+  FK_PAI         Int?
+  HORA_EMISSAO   String?   @db.VarChar(30)
+  ECARTAO        String?   @db.VarChar(1)
+  ID_USUARIO     Int?
+  EMPRESA        Int
+  FK_FICHA_CLI   Int?
+  VISIVEL        String?   @db.VarChar(1)
+  DT_CADASTRO    DateTime? @db.Date
+  FK_DEVOLUCAO   Int?
+  FK_CARTAO      Int?
+  TIPO_MOVIMENTO String?   @db.VarChar(2)
+  ID_SUBCAIXA    Int?
+  FK_OS          Int?
+  FPG            Int?
+  RESUMO_CAIXA   String?   @db.VarChar(1)
+  FK_NFE         Int?
+}
+
+model compra {
+  ID            Int      @id
+  EMPRESA       Int      @db.SmallInt
+  DTENTRADA     DateTime @db.Date
+  DTEMISSAO     DateTime @db.Date
+  FORNECEDOR    Int
+  MODELO        String?  @db.VarChar(5)
+  SERIE         String?  @db.VarChar(5)
+  CHAVE         String?  @db.VarChar(44)
+  NR_NOTA       String?  @db.VarChar(15)
+  SUBTOTAL      Decimal  @db.Decimal(15, 6)
+  FRETE         Decimal  @db.Decimal(15, 6)
+  DESPESAS      Decimal  @db.Decimal(15, 6)
+  SEGURO        Decimal  @db.Decimal(15, 6)
+  DESCONTO      Decimal  @db.Decimal(15, 6)
+  BASE_IPI      Decimal  @db.Decimal(15, 6)
+  TOTAL_IPI     Decimal  @db.Decimal(15, 6)
+  BASE_ICM      Decimal  @db.Decimal(15, 6)
+  TOTAL_ICM     Decimal  @db.Decimal(15, 6)
+  BASE_ST       Decimal  @db.Decimal(15, 6)
+  TOTAL_ST      Decimal  @db.Decimal(15, 6)
+  BASE_PIS      Decimal  @db.Decimal(15, 6)
+  TOTAL_PIS     Decimal  @db.Decimal(15, 6)
+  BASE_COF      Decimal  @db.Decimal(15, 6)
+  TOTAL_COF     Decimal  @db.Decimal(15, 6)
+  TOTAL         Decimal  @db.Decimal(15, 6)
+  GERA_CP       String   @db.VarChar(1)
+  GERA_ES       String   @db.VarChar(1)
+  AJUSTA_PC     String   @db.VarChar(1)
+  AJUSTA_PV     String   @db.VarChar(1)
+  EHFISCAL      String   @db.VarChar(1)
+  LEUXML        String   @db.VarChar(1)
+  STATUS        String   @db.VarChar(1)
+  XML           Bytes?   @db.Blob
+  TIPO          String?  @db.VarChar(1)
+  LEU_DUPLICATA String?  @db.VarChar(1)
+  NOME          String?  @db.VarChar(100)
+  BASE_FCP      Decimal? @db.Decimal(15, 4)
+  id_empresa    Int?
+  leu_duplicada String?  @db.VarChar(255)
+}
+
+model contas {
+  CODIGO        Int       @id
+  DESCRICAO     String?   @db.VarChar(40)
+  TIPO          String?   @db.VarChar(1)
+  DATA_ABERTURA DateTime? @db.Date
+  ID_USUARIO    Int?
+  EMPRESA       Int?
+  LOTE          Int?
+  SITUACAO      String?   @db.VarChar(1)
+  ATIVO         String?   @db.VarChar(1)
+}
+
+model contas_movimento {
+  CODIGO         Int       @id
+  ID_CONTA_CAIXA Int?
+  ID_USUARIO     Int?
+  HISTORICO      String?   @db.VarChar(50)
+  DATA           DateTime? @db.Date
+  HORA           DateTime? @db.Time(0)
+  ENTRADA        Decimal?  @db.Decimal(10, 0)
+  SAIDA          Decimal?  @db.Decimal(10, 0)
+  FKVENDA        Int?
+  LOTE           Int?
+  TROCA          Decimal?  @db.Decimal(10, 0)
+  SALDO          Decimal?  @db.Decimal(10, 0)
+  TROCO          Decimal?  @db.Decimal(10, 0)
+}
+
+model cpagar {
+  CODIGO         Int       @id
+  DATA           DateTime? @db.Date
+  FKFORNECE      Int?
+  DOC            String?   @db.VarChar(15)
+  VALOR          Decimal   @db.Decimal(15, 2)
+  DTVENCIMENTO   DateTime? @db.Date
+  HISTORICO      String?   @db.VarChar(50)
+  DATA_PAGAMENTO DateTime? @db.Date
+  DESCONTO       Decimal?  @db.Decimal(4, 2)
+  JUROS          Decimal?  @db.Decimal(15, 2)
+  VLPAGO         Decimal?  @db.Decimal(15, 2)
+  VL_RESTANTE    Decimal?  @db.Decimal(15, 2)
+  SITUACAO       String?   @db.VarChar(10)
+  FKEMPRESA      Int?
+  FK_COMPRA      Int?
+  FLAG           String?   @db.VarChar(1)
+  FK_USUARIO     Int?
+  FK_FPG         Int?
+}
+
+model cppagamento {
+  CODIGO            Int       @id
+  FKPAGAR           Int?
+  DATA              DateTime? @db.Date
+  VALOR_PARCELA     Decimal?  @db.Decimal(15, 2)
+  PERC_JUROS        Decimal?  @db.Decimal(15, 2)
+  JUROS             Decimal?  @db.Decimal(15, 2)
+  PERC_DESCONTO     Decimal?  @db.Decimal(15, 2)
+  DESCONTO          Decimal?  @db.Decimal(15, 2)
+  VALOR_RECEBIDO    Decimal?  @db.Decimal(15, 2)
+  FKPLANO           Int?
+  FKUSUARIO         Int?
+  FKKEMPRESA        Int?
+  FKCONTA           Int?
+  FK_FORMA_PGTO     Int?
+  NUMERO_CHEQUE     Int?
+  FKFORNECEDOR      Int?
+  FK_LOTE           Int?
+  valor_recebimento Float?
+}
+
+model creceber {
+  CODIGO                  Int       @id
+  DATA                    DateTime? @db.Date
+  FKCLIENTE               Int?
+  DOC                     String?   @db.VarChar(15)
+  VALOR                   Decimal?  @db.Decimal(4, 2)
+  DTVENCIMENTO            DateTime? @db.Date
+  HISTORICO               String?   @db.VarChar(50)
+  DATA_RECEBIMENTO        DateTime? @db.Date
+  DESCONTO                Decimal?  @db.Decimal(4, 2)
+  JUROS                   Decimal?  @db.Decimal(15, 2)
+  VRECEBIDO               Decimal?  @db.Decimal(4, 2)
+  VL_RESTANTE             Decimal?  @db.Decimal(15, 2)
+  SITUACAO                String?   @db.VarChar(10)
+  FKEMPRESA               Int?
+  FK_VENDA                Int?
+  FKCONTA                 Int?
+  TIPO                    String?   @db.VarChar(10)
+  NBOLETO                 Int?
+  ID_VENDEDOR             Int?
+  FK_OS                   Int?
+  FLAG                    String?   @db.VarChar(1)
+  BLOQUEADO               String?   @db.VarChar(1)
+  FK_USUARIO              Int?
+  CARTAO                  String?   @db.VarChar(1)
+  FPG_VENDA               Int?
+  PAGAMENTO_LOJA          String?   @db.Char(1)
+  CANCELAMENTO_LOJA       String?   @db.Char(1)
+  ALTERACAO_LOJA          String?   @db.Char(1)
+  CANCELAMENTO_DATA       DateTime? @db.Date
+  REMESSA                 String?   @db.Char(1)
+  REMESSA_REENVIAR        String?   @db.Char(1)
+  REMESSA_DATA            DateTime? @db.Date
+  REMESSA_ARQUIVO         String?   @db.VarChar(200)
+  REGISTRO_ID_CBR_RETORNO BigInt?
+  REGISTRO_STATUS         String?   @db.Char(1)
+  REGISTRO_DATA           DateTime? @db.Date
+  REGISTRO_ARQUIVO        String?   @db.VarChar(200)
+  RETORNO_ID_CBR_RETORNO  Int?
+  REGISTRO_HISTORICO      String?   @db.VarChar(200)
+  REGISTRO_SEM_REGISTRO   String?   @db.Char(1)
+  REGISTRO_LIMITE_PRAZO   String?   @db.Char(1)
+  RETORNO_HISTORICO       String?   @db.VarChar(300)
+  OBS                     String?   @db.VarChar(300)
+  ID_CBR_REMESSA_UUID     String?   @db.VarChar(44)
+  RETORNO_SEM_REGISTRO    String?   @db.Char(1)
+  RETORNO_LIMITE_PRAZO    String?   @db.Char(1)
+  FK_NFE                  Int?
+  RESTANTE                Decimal?  @db.Decimal(15, 2)
+  alteraacao_loja         String?   @db.VarChar(255)
+  id_cbr_remess_uuid      String?   @db.VarChar(255)
+  retorno_id_cbe_retorno  Int?
+}
+
+model crrecebimento {
+  CODIGO         Int       @id
+  FKCLIENTE      Int?
+  FKRECEBER      Int?
+  DATA           DateTime? @db.Date
+  VALOR_PARCELA  Decimal?  @db.Decimal(15, 2)
+  PERC_JUROS     Decimal?  @db.Decimal(15, 2)
+  JUROS          Decimal?  @db.Decimal(15, 2)
+  PERC_DESCONTO  Decimal?  @db.Decimal(15, 2)
+  DESCONTO       Decimal?  @db.Decimal(15, 2)
+  VALOR_RECEBIDO Decimal?  @db.Decimal(15, 2)
+  FKPLANO        Int?
+  FKUSUARIO      Int?
+  FKKEMPRESA     Int?
+  FKCONTA        Int?
+  FK_FORMA_PGTO  Int?
+  NUMERO_CHEQUE  Int?
+  ID_SUBCAIXA    Int?
+  FKLOTE         Int?
+  fkempresa      Int?
+}
+
+model crrecebimento_lote {
+  CODIGO         Int       @id
+  DATA           DateTime? @db.Date
+  FK_PLANO       Int?
+  FK_FPG         Int?
+  FK_CONTA       Int?
+  SALDO          Decimal?  @db.Decimal(15, 2)
+  JUROS_PERC     Decimal?  @db.Decimal(15, 2)
+  JUROS_VALOR    Decimal?  @db.Decimal(15, 2)
+  TOTAL_C_JUROS  Decimal?  @db.Decimal(15, 2)
+  DESCONTO_PERC  Decimal?  @db.Decimal(15, 2)
+  DESCONTO_VALOR Decimal?  @db.Decimal(15, 2)
+  TOTAL_FINAL    Decimal?  @db.Decimal(15, 2)
+  FK_EMPRESA     Int?
+  FK_USUARIO     Int?
+  TOTAL_RECEBIDO Decimal?  @db.Decimal(15, 2)
+  RESTANTE       Decimal?  @db.Decimal(15, 2)
+}
+
+model empresa {
+  CODIGO                      Int      @id
+  FANTASIA                    String   @db.VarChar(50)
+  RAZAO                       String   @db.VarChar(50)
+  TIPO                        String   @db.VarChar(10)
+  CNPJ                        String   @db.VarChar(20)
+  IE                          String   @db.VarChar(20)
+  IM                          String?  @db.VarChar(20)
+  ENDERECO                    String   @db.VarChar(50)
+  NUMERO                      String?  @db.VarChar(10)
+  COMPLEMENTO                 String?  @db.VarChar(40)
+  BAIRRO                      String   @db.VarChar(35)
+  CIDADE                      String   @db.VarChar(35)
+  UF                          String   @db.VarChar(2)
+  CEP                         String   @db.VarChar(8)
+  FONE                        String   @db.VarChar(30)
+  FAX                         String?  @db.VarChar(14)
+  SITE                        String?  @db.VarChar(60)
+  LOGOMARCA                   Bytes?   @db.Blob
+  FUNDACAO                    DateTime @db.Date
+  USU_CAD                     Int      @db.SmallInt
+  USU_ATU                     Int?     @db.SmallInt
+  NSERIE                      String   @db.VarChar(30)
+  CSENHA                      String   @db.VarChar(30)
+  NTERM                       String?  @db.VarChar(30)
+  ID_PLANO_TRANSFERENCIA_C    Int?
+  ID_PLANO_TRANSFERENCIA_D    Int?
+  ID_CAIXA_GERAL              Int?
+  BLOQUEAR_ESTOQUE_NEGATIVO   String?  @db.VarChar(1)
+  ID_CIDADE                   Int?
+  CRT                         Int?     @db.SmallInt
+  ID_UF                       Int?     @db.SmallInt
+  ID_PLANO_VENDA              Int?
+  OBSFISCO                    Bytes?   @db.Blob
+  CFOP                        String?  @db.VarChar(4)
+  CSOSN                       String?  @db.VarChar(3)
+  CST_ICMS                    String?  @db.VarChar(3)
+  ALIQ_ICMS                   Decimal? @db.Decimal(15, 2)
+  CST_ENTRADA                 String?  @db.VarChar(3)
+  CST_SAIDA                   String?  @db.VarChar(3)
+  ALIQ_PIS                    Decimal? @db.Decimal(15, 2)
+  ALIQ_COF                    Decimal? @db.Decimal(15, 2)
+  CST_IPI                     String?  @db.VarChar(3)
+  ALIQ_IPI                    Decimal? @db.Decimal(15, 2)
+  IMP_F5                      String?  @db.VarChar(1)
+  IMP_F6                      String?  @db.VarChar(1)
+  MOSTRA_RESUMO_CAIXA         String?  @db.VarChar(1)
+  LIMITE_DIARIO               Decimal? @db.Decimal(15, 2)
+  PRAZO_MAXIMO                Int?     @db.SmallInt
+  ID_PLA_CONTA_FICHA_CLI      Int?
+  ID_PLANO_CONTA_RETIRADA     Int?
+  USA_PDV                     String?  @db.VarChar(1)
+  RECIBO_VIAS                 String?  @db.VarChar(1)
+  ID_PLANO_TAXA_CARTAO        Int?
+  OBS_CARNE                   Bytes?   @db.Blob
+  CAIXA_UNICO                 String?  @db.VarChar(1)
+  CAIXA_RAPIDO                String?  @db.VarChar(1)
+  EMPRESA_PADRAO              Int?     @db.SmallInt
+  ID_PLANO_CONTA_DEVOLUCAO    Int?
+  N_INICIAL_NFCE              Int?
+  N_INICIAL_NFE               Int?
+  CHECA_ESTOQUE_FISCAL        String?  @db.VarChar(1)
+  DESCONTO_PROD_PROMO         String?  @db.VarChar(1)
+  DATA_CADASTRO               String?  @db.VarChar(100)
+  DATA_VALIDADE               String?  @db.VarChar(100)
+  FLAG                        String?  @db.VarChar(50)
+  LANCAR_CARTAO_CREDITO       String?  @db.VarChar(1)
+  FILTRAR_EMPRESA_LOGIN       String?  @db.VarChar(1)
+  ENVIAR_EMAIL_NFE            String?  @db.VarChar(1)
+  TRANSPORTADORA              String?  @db.VarChar(1)
+  TABELA_PRECO                String?  @db.VarChar(1)
+  TAXA_VENDA_PRAZO            Decimal? @db.Decimal(15, 2)
+  EMAIL_CONTADOR              String?  @db.VarChar(100)
+  AUTOPECAS                   String?  @db.VarChar(1)
+  ATUALIZA_PR_VENDA           String?  @db.VarChar(1)
+  INFORMAR_GTIN               String?  @db.VarChar(1)
+  RECOLHE_FCP                 String?  @db.VarChar(1)
+  DIFAL_ORIGEM                Decimal? @db.Decimal(15, 2)
+  DIFAL_DESTINO               Decimal? @db.Decimal(15, 2)
+  EXCLUI_PDV                  String?  @db.VarChar(1)
+  VENDA_SEMENTE               String?  @db.VarChar(1)
+  CHECA                       String?  @db.VarChar(50)
+  EMAIL                       String?  @db.VarChar(100)
+  ULTIMONSU                   String?  @db.VarChar(30)
+  ULTIMO_PEDIDO               Int?
+  TIPO_CONTRATO               Int?
+  TIPO_EMPRESA                Int?
+  QTD_MESAS                   Int?     @db.SmallInt
+  BLOQUEAR_PRECO              String?  @db.VarChar(1)
+  EXIBE_RESUMO_CAIXA          String?  @db.VarChar(1)
+  ID_PLANO_COMPRA             Int?
+  RESPONSAVEL_TECNICO         String?  @db.VarChar(1)
+  CARENCIA_JUROS              Int?
+  PESQUISA_REFERENCIA         String?  @db.VarChar(1)
+  RESTAURANTE                 String?  @db.VarChar(1)
+  EXIBE_F3                    String?  @db.VarChar(1)
+  EXIBE_F4                    String?  @db.VarChar(1)
+  LER_PESO                    String?  @db.VarChar(1)
+  DESCONTO_MAXIMO             Decimal? @db.Decimal(15, 2)
+  CHECA_LIMITE                String?  @db.VarChar(1)
+  EMITE_ECF                   String?  @db.VarChar(1)
+  LOJA_ROUPA                  String?  @db.VarChar(1)
+  TIPO_JUROS                  String?  @db.VarChar(1)
+  JUROS_DIA                   Decimal? @db.Decimal(15, 2)
+  JUROS_MES                   Decimal? @db.Decimal(15, 2)
+  FARMACIA                    String?  @db.VarChar(1)
+  PAGAMENTO_DINHEIRO          String?  @db.VarChar(1)
+  RESPONSAVEL_EMPRESA         String?  @db.VarChar(50)
+  HABILITA_DESCONTO_PDV       String?  @db.VarChar(1)
+  PUXA_CFOP_PRODUTO           String?  @db.VarChar(1)
+  LANCAR_CARTAO_CR            String?  @db.VarChar(1)
+  USA_BLUETOOTH_RESTA         String?  @db.VarChar(1)
+  CFOP_EXTERNO                String?  @db.VarChar(4)
+  CNAE                        String?  @db.VarChar(20)
+  CODIGO_PAIS                 Int?
+  OBSNFCE                     Bytes?   @db.Blob
+  CSOSN_EXTERNO               String?  @db.VarChar(3)
+  CST_EXTERNO                 String?  @db.VarChar(3)
+  ALIQ_ICMS_EXTERNO           Decimal? @db.Decimal(15, 2)
+  COD_FPG_DINHEIRO            Int?
+  HABILITA_ACRESCIMO          String?  @db.VarChar(1)
+  MULTI_IDIOMA                String?  @db.VarChar(1)
+  REPLICAR_DADOS              String?  @db.VarChar(1)
+  ID_PLANO_BOLETO             Int?
+  SEGUNDA_VIA_NFCE            String?  @db.VarChar(1)
+  EXIBE_ESTOQUE_FISCAL        String?  @db.VarChar(1)
+  NFCE_PRODUTO_SUBSTITUTO     String?  @db.VarChar(1)
+  AUTO_CADASTRO_PRODUTO       String?  @db.VarChar(1)
+  CFOP_ENTRADA_PADRAO         String?  @db.VarChar(4)
+  CFOP_ENTRADA_PADRO_E        String?  @db.VarChar(4)
+  PUXAR_CFOP_ENTRADA          String?  @db.VarChar(1)
+  LUCRO_PADRAO                Decimal? @db.Decimal(15, 4)
+  NFE_SERIE                   Int?
+  OCULTAR_SALDO_ANTERIOR      String?  @db.VarChar(1)
+  BAIXAR_ESTOQUE_NFE          String?  @db.VarChar(1)
+  TRANSMITIR_CARTAO_AUTO      String?  @db.VarChar(1)
+  ALIQUOTA_SIMPLES            Decimal? @db.Decimal(15, 4)
+  SERVIDOR_SMTP_PROPRIO       String?  @db.VarChar(1)
+  MENSAGEM_COBRANCA           Bytes?   @db.Blob
+  PRE_VISUALIZAR_IMPRESSAO    String?  @db.VarChar(1)
+  ID_PLANO_ABERTURA           Int?
+  PESQUISA_POR_PARTE          String?  @db.VarChar(1)
+  BAIXAR_ESTOQUE_COMPOSICAO   String?  @db.VarChar(1)
+  AUTO_ATUALIZA               String?  @db.VarChar(1)
+  USA_TEF                     String?  @db.VarChar(1)
+  RATEAR_FRETE                String?  @db.VarChar(1)
+  USA_CREDITO_SIMPLES         String?  @db.VarChar(1)
+  DESCONTO_ITEM_PDV           String?  @db.VarChar(1)
+  BLOQUEAR_CPF                String?  @db.VarChar(1)
+  BLOQUEAR_PERSONALIZACAO     String?  @db.VarChar(1)
+  PERMITIR_CPF_VAZIO          String?  @db.VarChar(1)
+  COLORIR_ESTOQUE             String?  @db.VarChar(1)
+  FECHAMENTO_CAIXA_AUTOMATICO String?  @db.VarChar(1)
+  atualizar_pr_venda          String?  @db.VarChar(255)
+  auto_atualizada             String?  @db.VarChar(255)
+  cfop_entrada_padrao_e       String?  @db.VarChar(255)
+  cfop_entrata_padrao         String?  @db.VarChar(255)
+  chega_limite                String?  @db.VarChar(255)
+  desconto_item_pvd           String?  @db.VarChar(255)
+  habilitada_acrescimo        String?  @db.VarChar(255)
+  id_plano_cobertura          Int?
+  id_plano_transferencia      Int?
+  lucro_patrao                Float?
+  responsavale_empresa        String?  @db.VarChar(255)
+  usa_atu                     Int?
+  usa_bluetooh_resta          String?  @db.VarChar(255)
+  usa_cad                     Int?
+  PRECO_PERMANENTE_PDV        String?  @db.VarChar(1)
+}
+
+model forma_pagamento {
+  CODIGO         Int      @id
+  DESCRICAO      String?  @db.VarChar(30)
+  GERACR         String?  @db.VarChar(1)
+  GERACH         String?  @db.VarChar(1)
+  ECARTAO        String?  @db.VarChar(1)
+  USAVD          String?  @db.VarChar(1)
+  USACR          String?  @db.VarChar(1)
+  ATIVO          String?  @db.VarChar(1)
+  PARCELAS       Int?
+  INTERVALO      Int?
+  TAXA           Decimal? @db.Decimal(15, 2)
+  ENTRADA        Decimal? @db.Decimal(15, 2)
+  TIPO           String?  @db.VarChar(1)
+  DIAS           Int?     @db.SmallInt
+  FKCONTADESTINO Int?
+  COD_BEMA       String?  @db.VarChar(10)
+  COD_DARU       String?  @db.VarChar(10)
+  COD_ELGI       String?  @db.VarChar(10)
+  COD_EPSO       String?  @db.VarChar(10)
+  GERACC         String?  @db.VarChar(1)
+  GERACX         String?  @db.VarChar(1)
+  FK_PESSOA      Int?
+  USA_TEF        String?  @db.VarChar(1)
+  FK_BANDEIRA    Int?
+}
+
+model grupo {
+  EMPRESA   Int
+  CODIGO    Int    @id
+  DESCRICAO String @db.VarChar(35)
+  ATIVO     String @db.VarChar(1)
+}
+
+model persona {
+  id        Int    @id @default(autoincrement())
+  nombres   String @db.VarChar(100)
+  apellidos String @db.VarChar(100)
+}
+
+model pessoa {
+  EMPRESA           Int?      @db.SmallInt
+  CODIGO            Int       @id
+  TIPO              String?   @db.VarChar(10)
+  CNPJ              String?   @db.VarChar(20)
+  IE                String?   @db.VarChar(20)
+  FANTASIA          String?   @db.VarChar(50)
+  ENDERECO          String?   @db.VarChar(50)
+  NUMERO            String?   @db.VarChar(10)
+  COMPLEMENTO       String?   @db.VarChar(50)
+  CODMUN            Int?
+  MUNICIPIO         String?   @db.VarChar(35)
+  BAIRRO            String?   @db.VarChar(35)
+  UF                String?   @db.VarChar(2)
+  CEP               String?   @db.VarChar(8)
+  FONE1             String?   @db.VarChar(14)
+  FONE2             String?   @db.VarChar(14)
+  CELULAR1          String?   @db.VarChar(14)
+  CELULAR2          String?   @db.VarChar(14)
+  EMAIL1            String?   @db.VarChar(60)
+  EMAIL2            String?   @db.VarChar(60)
+  FOTO              Bytes?    @db.Blob
+  SEXO              String?   @db.VarChar(10)
+  DT_NASC           DateTime? @db.Date
+  ECIVIL            String?   @db.VarChar(10)
+  LIMITE            Decimal?  @db.Decimal(15, 2)
+  DIA_PGTO          Int?      @db.SmallInt
+  OBS               Bytes?    @db.Blob
+  NUM_USU           Int?      @db.SmallInt
+  FATURA            String?   @db.VarChar(1)
+  CHEQUE            String?   @db.VarChar(1)
+  CCF               String?   @db.VarChar(1)
+  SPC               String?   @db.VarChar(1)
+  ISENTO            String?   @db.VarChar(1)
+  FORN              String?   @db.VarChar(1)
+  FUN               String?   @db.VarChar(1)
+  CLI               String?   @db.VarChar(1)
+  FAB               String?   @db.VarChar(1)
+  TRAN              String?   @db.VarChar(1)
+  ADM               String?   @db.VarChar(1)
+  ATIVO             String?   @db.VarChar(1)
+  DT_ADMISSAO       DateTime? @db.Date
+  DT_DEMISSAO       DateTime? @db.Date
+  SALARIO           Decimal?  @db.Decimal(15, 2)
+  PAI               String?   @db.VarChar(50)
+  MAE               String?   @db.VarChar(50)
+  BANCO             String?   @db.VarChar(30)
+  AGENCIA           String?   @db.VarChar(20)
+  GERENTE           String?   @db.VarChar(30)
+  FONE_GERENTE      String?   @db.VarChar(15)
+  PROPRIEDADE       String?   @db.VarChar(50)
+  DT_CADASTRO       DateTime? @db.Date
+  TECNICO           String?   @db.VarChar(1)
+  ATENDENTE         String?   @db.VarChar(1)
+  CODIGO_WEB        Int?
+  REFERENCIA        Int?
+  FLAG              String?   @db.VarChar(1)
+  TIPO_RECEBIMENTO  String?   @db.VarChar(20)
+  PARC              String?   @db.VarChar(1)
+  REGIME_TRIBUTARIO String?   @db.VarChar(10)
+  WHATSAPP          String?   @db.VarChar(14)
+  RAZAO             String?   @db.VarChar(100)
+}
+
+model produto {
+  CODIGO                Int       @id
+  TIPO                  String    @db.VarChar(30)
+  CODBARRA              String?   @db.VarChar(20)
+  REFERENCIA            String?   @db.VarChar(20)
+  GRUPO                 Int
+  UNIDADE               String    @db.VarChar(3)
+  ULTFORN               Int?
+  LOCALIZACAO           String?   @db.VarChar(40)
+  ALIQ_ICM              Decimal   @default(0.00) @db.Decimal(4, 2)
+  ALIQ_PIS              Decimal   @default(0.00) @db.Decimal(4, 2)
+  ALIQ_COF              Decimal   @default(0.00) @db.Decimal(4, 2)
+  PR_CUSTO              Decimal   @default(0.00) @db.Decimal(15, 2)
+  MARGEM                Decimal   @default(0.00) @db.Decimal(6, 2)
+  PR_VENDA              Decimal   @default(0.00) @db.Decimal(15, 2)
+  QTD_ATUAL             Decimal   @default(0.000000) @db.Decimal(15, 6)
+  QTD_MIN               Decimal   @default(0.000000) @db.Decimal(15, 6)
+  E_MEDIO               Decimal?  @db.Decimal(15, 3)
+  CSTICMS               String?   @db.VarChar(5)
+  CSTE                  String?   @db.VarChar(5)
+  CSTS                  String?   @db.VarChar(5)
+  CSTIPI                String?   @db.VarChar(5)
+  CSOSN                 String?   @db.VarChar(5)
+  NCM                   String    @db.VarChar(10)
+  COMISSAO              Decimal?  @db.Decimal(4, 2)
+  DESCONTO              Decimal?  @db.Decimal(4, 2)
+  FOTO                  Bytes?    @db.Blob
+  ATIVO                 String    @db.VarChar(1)
+  CFOP                  String?   @db.VarChar(4)
+  PR_CUSTO_ANTERIOR     Decimal   @default(0.00) @db.Decimal(15, 2)
+  PR_VENDA_ANTERIOR     Decimal   @default(0.00) @db.Decimal(15, 2)
+  ULT_COMPRA            Int       @default(0)
+  ULT_COMPRA_ANTERIOR   Int       @default(0)
+  PRECO_ATACADO         Decimal?  @db.Decimal(15, 2)
+  QTD_ATACADO           Decimal?  @db.Decimal(15, 3)
+  COD_BARRA_ATACADO     String?   @db.VarChar(20)
+  ALIQ_IPI              Decimal?  @db.Decimal(15, 2)
+  EMPRESA               Int       @db.SmallInt
+  CEST                  String?   @db.VarChar(10)
+  GRADE                 String?   @db.VarChar(1)
+  EFISCAL               String?   @db.VarChar(1)
+  PAGA_COMISSAO         String?   @db.VarChar(1)
+  PESO                  Decimal?  @db.Decimal(15, 2)
+  COMPOSICAO            String?   @db.VarChar(1)
+  PRECO_PROMO_ATACADO   Decimal?  @db.Decimal(15, 2)
+  PRECO_PROMO_VAREJO    Decimal?  @db.Decimal(15, 2)
+  INICIO_PROMOCAO       DateTime? @db.Date
+  FIM_PROMOCAO          DateTime? @db.Date
+  ESTOQUE_INICIAL       Decimal?  @db.Decimal(15, 3)
+  PR_VENDA_PRAZO        Decimal?  @db.Decimal(15, 2)
+  PRECO_VARIAVEL        String?   @db.VarChar(1)
+  APLICACAO             String?   @db.VarChar(50)
+  REDUCAO_BASE          Decimal?  @db.Decimal(15, 2)
+  MVA                   Decimal?  @db.Decimal(15, 2)
+  FCP                   Decimal?  @db.Decimal(15, 2)
+  PRODUTO_PESADO        String?   @db.VarChar(1)
+  SERVICO               String?   @db.VarChar(1)
+  DT_CADASTRO           DateTime  @db.Date
+  DESCRICAO             String?   @db.VarChar(100)
+  PR_CUSTO2             Decimal?  @db.Decimal(15, 2)
+  PERC_CUSTO            Decimal?  @db.Decimal(15, 2)
+  RESTAUTANTE           String?   @db.VarChar(1)
+  TEMPO_ESPERA          Int?
+  COMPLEMENTO           String?   @db.VarChar(100)
+  FK_MARCA              Int?
+  PREFIXO_BALANCA       String?   @db.VarChar(8)
+  FK_PRINCIPIO_ATIVO    Int?
+  REMEDIO               String?   @db.VarChar(1)
+  TIPO_RESTAURANTE      String?   @db.VarChar(1)
+  FK_TECIDO             DateTime? @db.Date
+  CFOP_EXTERNO          Int?
+  ETQ                   String?   @db.VarChar(1)
+  CSOSN_EXTERNO         String?   @db.VarChar(3)
+  CST_EXTERNO           String?   @db.VarChar(3)
+  ALIQ_ICMS_EXTERNO     Decimal?  @db.Decimal(15, 2)
+  ORIGEM                Int?
+  GLP                   Decimal?  @db.Decimal(15, 4)
+  GNN                   Decimal?  @db.Decimal(15, 4)
+  GNI                   Decimal?  @db.Decimal(15, 4)
+  PESO_LIQ              Decimal?  @db.Decimal(15, 4)
+  ANP                   String?   @db.VarChar(20)
+  COMBUSTIVEL           String?   @db.VarChar(1)
+  FK_LCP                String?   @db.VarChar(10)
+  ISSQN                 Decimal?  @db.Decimal(15, 4)
+  TIPO_TRIBUTACAO       String?   @db.VarChar(10)
+  QTD_FISCAL            Decimal?  @db.Decimal(15, 4)
+  ID_PRODUTO_SIMILAR    Int?
+  DATA_PRECO            DateTime? @db.Date
+  TRIBUTACAO_MONOFASICA String?   @db.VarChar(1)
+  ID_MENU               Int?
+  VALOR_PEQUENA         Decimal?  @db.Decimal(15, 4)
+  VALOR_MEDIA           Decimal?  @db.Decimal(15, 4)
+  VALOR_GRANDE          Decimal?  @db.Decimal(15, 4)
+  TIPO_ALIMENTO         String?   @db.VarChar(1)
+  SERIAL                String?   @db.VarChar(1)
+  MVA_NORMAL            Decimal?  @db.Decimal(15, 4)
+  IMPRIME_TICKET        String?   @db.VarChar(1)
+  ICMS_DIFERIDO         Decimal?  @db.Decimal(15, 4)
+  QTD_SABORES           Int?
+  COD_ENQ_IPI           String?   @db.VarChar(10)
+  ALIQ_DESON            Decimal?  @db.Decimal(15, 4)
+  MOTIVO_DESONERACAO    Int?
+  COD_BENEFICIO         String?   @db.VarChar(20)
+  FABRICADO             String?   @db.VarChar(1)
+  PESO_L                Decimal?  @db.Decimal(15, 4)
+  PESO_B                Decimal?  @db.Decimal(15, 4)
+  CHATBOOT              String?   @db.VarChar(1)
+  id                    String?   @db.VarChar(255)
+  restaurante           String?   @db.VarChar(255)
+}
+
+model resumo_caixa {
+  CODIGO    Int      @id
+  LOTE      Int?
+  FPG       Int?
+  USUARIO   Int?
+  CAIXA     Int?
+  DATA_HORA DateTime @default(now()) @db.Timestamp(0)
+  TIPO      String?  @db.VarChar(1)
+  HISTORICO String?  @db.VarChar(100)
+  FLAG      String?  @db.VarChar(1)
+  ENTRADA   Decimal? @db.Decimal(15, 4)
+  SAIDA     Decimal? @db.Decimal(15, 4)
+  FKEMPRESA Int?
+}
+
+model usuarios {
+  CODIGO        Int     @id @db.SmallInt
+  SENHA         String? @db.VarChar(30)
+  HIERARQUIA    Int?    @db.SmallInt
+  ECAIXA        String? @db.VarChar(1)
+  SUPERVISOR    String? @db.VarChar(1)
+  ATIVO         String? @db.VarChar(1)
+  ULTIMO_PEDIDO Int?
+  ULTIMA_VENDA  Int?
+  SENHA_APP     String? @db.VarChar(30)
+  APP_SENHA     String? @db.VarChar(30)
+  FK_VENDEDOR   Int?
+  FLAG          String? @db.VarChar(1)
+  LOGIN         String? @db.VarChar(50)
+}
+
+model vendas_detalhe {
+  CODIGO             Int      @id
+  FKVENDA            Int
+  ID_PRODUTO         Int
+  ITEM               Int?     @db.SmallInt
+  COD_BARRA          String?  @db.VarChar(14)
+  QTD                Decimal? @db.Decimal(15, 3)
+  E_MEDIO            Decimal? @db.Decimal(15, 2)
+  PRECO              Decimal? @db.Decimal(15, 2)
+  VALOR_ITEM         Decimal? @db.Decimal(15, 2)
+  VDESCONTO          Decimal? @db.Decimal(15, 2)
+  TOTAL              Decimal? @db.Decimal(15, 2)
+  SITUACAO           String?  @db.VarChar(1)
+  UNIDADE            String?  @db.VarChar(3)
+  QTD_DEVOLVIDA      Decimal? @db.Decimal(15, 3)
+  ACRESCIMO          Decimal? @db.Decimal(15, 2)
+  OS                 String?  @db.VarChar(1)
+  FK_GRADE           Int?
+  ID_PRODUTO_SIMILAR Int?
+  ID_SERIAL          Int?
+  FK_MESA            Int?
+  QTD_RESTANTE       Decimal? @db.Decimal(10, 0)
+  OBSERVACAO         String?  @db.VarChar(150)
+  fk_grande          Int?
+}
+
+model vendas_fpg {
+  CODIGO               Int      @id
+  VENDAS_MASTER        Int
+  ID_FORMA             Int?
+  VALOR                Decimal? @db.Decimal(15, 2)
+  FK_USUARIO           Int?
+  SITUACAO             String?  @db.VarChar(1)
+  TIPO                 String?  @db.VarChar(1)
+  TROCO                Decimal? @db.Decimal(15, 4)
+  INDICE               String?  @db.VarChar(10)
+  FEZ_TEF              String?  @db.VarChar(1)
+  NSU                  String?  @db.VarChar(50)
+  REDE                 String?  @db.VarChar(50)
+  REDECNPJ             String?  @db.VarChar(50)
+  TOTAL                Decimal? @db.Decimal(10, 0)
+  CODIGOAUTORIZACAO    String?  @db.VarChar(20)
+  BIN                  String?  @db.VarChar(20)
+  DONOCARTAO           String?  @db.VarChar(100)
+  DATAEXPIRACAO        String?  @db.VarChar(5)
+  PARCELAS             Int?
+  CODIGOPAGAMENTO      Int?
+  VALORPAGAMENTO       Decimal? @db.Decimal(15, 4)
+  ID_FILA              Int?
+  TIPO_TEF             String?  @db.VarChar(1)
+  ULTIMOSQUATRODIGITOS String?  @db.VarChar(4)
+  dataexpedicao        String?  @db.VarChar(255)
+}
+
+model vendas_master {
+  CODIGO               Int       @id
+  DATA_EMISSAO         String?   @db.VarChar(10)
+  DATA_SAIDA           DateTime? @db.Date
+  ID_CLIENTE           Int?
+  FK_USUARIO           Int?
+  FK_CAIXA             Int?
+  FK_VENDEDOR          Int?
+  CPF_NOTA             String?   @db.VarChar(20)
+  SUBTOTAL             Decimal?  @default(0.00) @db.Decimal(15, 2)
+  TIPO_DESCONTO        String?   @db.VarChar(15)
+  DESCONTO             Decimal?  @default(0.00) @db.Decimal(15, 2)
+  TROCO                Decimal?  @db.Decimal(15, 2)
+  DINHEIRO             Decimal?  @db.Decimal(15, 2)
+  TOTAL                Decimal?  @default(0.00) @db.Decimal(15, 2)
+  OBSERVACOES          Bytes?    @db.Blob
+  SITUACAO             String    @db.VarChar(1)
+  FKEMPRESA            Int
+  PERCENTUAL           Decimal?  @db.Decimal(15, 2)
+  TIPO                 String?   @db.VarChar(1)
+  NECF                 Int?
+  FKORCAMENTO          Int?
+  LOTE                 Int?
+  GERA_FINANCEIRO      String?   @db.VarChar(1)
+  PERCENTUAL_ACRESCIMO Decimal?  @db.Decimal(15, 2)
+  ACRESCIMO            Decimal?  @db.Decimal(15, 2)
+  FK_TABELA            Int?
+  PEDIDO               String?   @db.VarChar(30)
+  OS                   String?   @db.VarChar(1)
+  FK_OS                Int?
+  TOTAL_TROCA          Decimal?  @db.Decimal(15, 2)
+  FORMA_PAGAMENTO      String?   @db.VarChar(250)
+  FK_ENTREGADOR        Int?
+  FLAG_NFCE            String?   @db.VarChar(1)
+  FK_MESA              Int?
+  NOME                 String?   @db.VarChar(100)
+  TELA                 String?   @db.VarChar(20)
+}

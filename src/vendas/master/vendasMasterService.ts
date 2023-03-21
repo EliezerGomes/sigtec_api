@@ -8,13 +8,13 @@ export class VendasMasterService {
         let vendas = Array()
 
         vendas_master.map((data) => {
-            const dia = (data.DATA_EMISSAO!.getDate() + 1)
-            const mes = (data.DATA_EMISSAO!.getMonth() + 1)
-            const ano = data.DATA_EMISSAO!.getFullYear()
+            // const dia = (data.DATA_EMISSAO!.getDate() + 1)
+            // const mes = (data.DATA_EMISSAO!.getMonth() + 1)
+            // const ano = data.DATA_EMISSAO!.getFullYear()
             
             vendas.push({
                 ...data,
-                DATA_EMISSAO: `${ano}-${mes}-${dia}`
+                //DATA_EMISSAO: `${ano}-${mes}-${dia}`
             })
         })
 

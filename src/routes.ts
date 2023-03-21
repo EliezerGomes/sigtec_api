@@ -47,7 +47,7 @@ const crRecebimento = new CrRecebimentoController()
 const loginController = new LoginController()
 
 router.get("/vendasmaster/listarVendas",vendasMasterController.listarVendasMaster)
-router.get("/vendasformapagamento/listarVendasfpgService",  vendaFpgController.listarVendasFpg)
+router.get("/vendasformapagamento/listarVendasfpgService", vendaFpgController.listarVendasFpg)
 router.get("/vendasdetalhes/listarVendasDetalhes",  vendaDetalhes.listarVendasDetalhes)
 router.get("/resumocaixa/listarresumocaixa",  resumoCaixaController.resumo_caixa)
 router.get("/produtos/listarProdutosService",  listaProdutoController.listaProdutos)

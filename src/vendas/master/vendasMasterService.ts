@@ -9,7 +9,7 @@ export class VendasMasterService {
         const vendas = Array()
 
         vendas_master.map((data) => {
-            const dataFormatada = moment(data.DATA_EMISSAO!).add(1, 'day').format('YYYY-MM-DD')
+            const dataFormatada = moment(data.DATA_EMISSAO!).format('YYYY-MM-DD')
 
             vendas.push({
                 ...data,

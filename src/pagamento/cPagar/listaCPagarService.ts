@@ -8,7 +8,7 @@ export class ContasPagarService{
         const pag = Array()
 
         cPagar.map((data) => {
-            const dataFormatada = moment(data.DATA!).add(1, 'day').format('YYYY-MM-DD')
+            const dataFormatada = moment(data.DATA!).format('YYYY-MM-DD')
 
             pag.push({
                 ...data,

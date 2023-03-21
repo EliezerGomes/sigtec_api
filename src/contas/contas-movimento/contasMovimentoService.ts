@@ -8,7 +8,7 @@ export class ContasMovimentoService {
         const mov = Array()
 
         contas.map((data) => {
-            const dataFormatada = moment(data.DATA!).add(1, 'day').format('YYYY-MM-DD')
+            const dataFormatada = moment(data.DATA!).format('YYYY-MM-DD')
 
             mov.push({
                 ...data,

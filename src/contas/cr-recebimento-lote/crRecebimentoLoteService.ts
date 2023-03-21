@@ -8,7 +8,7 @@ export class CrRecebimentoLoteService {
         const rec = Array()
 
         crRecebimentoLote.map((data) => {
-            const dataFormatada = moment(data.DATA!).add(1, 'day').format('YYYY-MM-DD')
+            const dataFormatada = moment(data.DATA!).format('YYYY-MM-DD')
 
             rec.push({
                 ...data,

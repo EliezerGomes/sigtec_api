@@ -7,6 +7,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model usuarioLogin {
+  id             Int  @id  @default(autoincrement())
+  cnpj           String
+  senha          String
+  situacao          Boolean
+}
+
 model caixa {
   CODIGO         Int       @id
   EMISSAO        DateTime? @db.Date

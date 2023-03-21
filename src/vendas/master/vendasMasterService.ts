@@ -5,6 +5,19 @@ export class VendasMasterService {
     async execute() {
         const vendas_master = await prismaClient.vendas_master.findMany()
 
+        let vendas = Array()
+
+        vendas_master.map((data) => {
+            const dia = (data.DATA_EMISSAO!.getDate() + 1)
+            const mes = (data.DATA_EMISSAO!.getMonth() + 1)
+            const ano = data.DATA_EMISSAO!.getFullYear()
+            
+            vendas.push({
+                ...data,
+                DATA_EMISSAO: `${ano}-${mes}-${dia}`
+            })
+        })
+
         //  let vendas = Array()
 
         // vendas_master.map((data) => {
@@ -21,6 +34,6 @@ export class VendasMasterService {
         //     })
 
 
-     return vendas_master
+     return vendas
     }
 }

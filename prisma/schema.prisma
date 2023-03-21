@@ -8,7 +8,7 @@ datasource db {
 }
 
 model usuarioLogin {
-  id             Int  @id  @default(autoincrement())
+  codigo         Int  @id  @default(autoincrement())
   cnpj           String
   senha          String
   situacao          Boolean
@@ -728,7 +728,7 @@ model vendas_fpg {
 
 model vendas_master {
   CODIGO               Int       @id
-  DATA_EMISSAO         String?   @db.VarChar(10)
+  DATA_EMISSAO         DateTime  
   DATA_SAIDA           DateTime? @db.Date
   ID_CLIENTE           Int?
   FK_USUARIO           Int?

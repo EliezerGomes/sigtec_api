@@ -1,3 +1,4 @@
+import { LoginController } from './autenticacao/loginController';
 import { ListaPessoaController } from './pessoa/listaPessoaController';
 import { ContasReceberController } from './contas/contas-receber/contasReceberController';
 import { UsuariosController } from './usuarios/listaUsuarios/listaUsuariosController';
@@ -18,6 +19,7 @@ import { VendaFpgController } from './vendas/fgp/vendasFpgController';
 import { VendaDetalhesController } from './vendas/detalhes/vendaDetalhesController';
 import { CrRecebimentoController } from './contas/crRecebimento/crRecebimentoController';
 import { ContasReceberLoteController } from './contas/cr-recebimento-lote/crRecebimentoLoteController';
+import { ensureAuthenticate } from './middlewares/ensureAuthenticate';
 
 const router = Router()
 
@@ -42,24 +44,28 @@ const usuariosController = new UsuariosController()
 const listaPessoaController = new ListaPessoaController()
 const crRecebimento = new CrRecebimentoController()
 
-router.get("/vendasmaster/listarVendas", vendasMasterController.listarVendasMaster)
-router.get("/vendasformapagamento/listarVendasfpgService", vendaFpgController.listarVendasFpg)
-router.get("/vendasdetalhes/listarVendasDetalhes", vendaDetalhes.listarVendasDetalhes)
-router.get("/resumocaixa/listarresumocaixa", resumoCaixaController.resumo_caixa)
-router.get("/produtos/listarProdutosService", listaProdutoController.listaProdutos)
-router.get("/grupos/listargrupos", gruposController.grupos)
-router.get("/formapagamento/listarFormapagamento", formaPagamentoController.pagamentos)
-router.get("/empresas/listarEmpresas", listaEmpresasController.empresas)
-router.get("/cpagamento/listarCpagamento", cpPagamentosController.listaCpPagamentos)
-router.get("/cpagar/listarCpagar", cPagar.listaCPagar)
-router.get("/contasmovimento/listarcontasmovimento", contasMovimentoController.exibeContas)
-router.get("/contas/listarconta", listaContasController.listaContas)
-router.get("/creceber/listarCreceber", cReceber.listaContasReceber)
-router.get("/crecebimento/listarCrecebimento", crRecebimento.listaCrRecebimento)
-router.get("/crecebimentolote/listarCrecebimentolote", crReceberLote.listaContasReceber)
-router.get("/ccompra/listarCcompra", comprasController.listaCompras)
-router.get("/caixa/listarcaixa", caixaController.exibeCaixa)
-router.get("/usuarios/listarusuarios", usuariosController.listaUsuarios)
-router.get("/pessoas/listarPessoas", listaPessoaController.listaPessoa)
+const loginController = new LoginController()
+
+router.get("/vendasmaster/listarVendas", ensureAuthenticate,vendasMasterController.listarVendasMaster)
+router.get("/vendasformapagamento/listarVendasfpgService", ensureAuthenticate, vendaFpgController.listarVendasFpg)
+router.get("/vendasdetalhes/listarVendasDetalhes", ensureAuthenticate, vendaDetalhes.listarVendasDetalhes)
+router.get("/resumocaixa/listarresumocaixa", ensureAuthenticate, resumoCaixaController.resumo_caixa)
+router.get("/produtos/listarProdutosService", ensureAuthenticate, listaProdutoController.listaProdutos)
+router.get("/grupos/listargrupos", ensureAuthenticate, gruposController.grupos)
+router.get("/formapagamento/listarFormapagamento", ensureAuthenticate, formaPagamentoController.pagamentos)
+router.get("/empresas/listarEmpresas", ensureAuthenticate, listaEmpresasController.empresas)
+router.get("/cpagamento/listarCpagamento", ensureAuthenticate, cpPagamentosController.listaCpPagamentos)
+router.get("/cpagar/listarCpagar", ensureAuthenticate, cPagar.listaCPagar)
+router.get("/contasmovimento/listarcontasmovimento", ensureAuthenticate, contasMovimentoController.exibeContas)
+router.get("/contas/listarconta", ensureAuthenticate, listaContasController.listaContas)
+router.get("/creceber/listarCreceber", ensureAuthenticate, cReceber.listaContasReceber)
+router.get("/crecebimento/listarCrecebimento",  ensureAuthenticate,crRecebimento.listaCrRecebimento)
+router.get("/crecebimentolote/listarCrecebimentolote", ensureAuthenticate, crReceberLote.listaContasReceber)
+router.get("/ccompra/listarCcompra", ensureAuthenticate, comprasController.listaCompras)
+router.get("/caixa/listarcaixa", ensureAuthenticate, caixaController.exibeCaixa)
+router.get("/usuarios/listarusuarios", ensureAuthenticate, usuariosController.listaUsuarios)
+router.get("/pessoas/listarPessoas", ensureAuthenticate, listaPessoaController.listaPessoa)
+
+router.post("/login", loginController.login)
 
 export { router }

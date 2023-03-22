@@ -7,13 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model usuarioLogin {
-  codigo         Int  @id  @default(autoincrement())
-  cnpj           String
-  senha          String
-  situacao          Boolean
-}
-
 model caixa {
   CODIGO         Int       @id
   EMISSAO        DateTime? @db.Date
@@ -656,6 +649,13 @@ model resumo_caixa {
   FKEMPRESA Int?
 }
 
+model usuarioLogin {
+  codigo   Int     @id @default(autoincrement())
+  cnpj     String  @db.VarChar(15)
+  senha    String  @db.VarChar(20)
+  situacao Boolean
+}
+
 model usuarios {
   CODIGO        Int     @id @db.SmallInt
   SENHA         String? @db.VarChar(30)
@@ -728,7 +728,7 @@ model vendas_fpg {
 
 model vendas_master {
   CODIGO               Int       @id
-  DATA_EMISSAO         DateTime  
+  DATA_EMISSAO         DateTime? @db.Date
   DATA_SAIDA           DateTime? @db.Date
   ID_CLIENTE           Int?
   FK_USUARIO           Int?

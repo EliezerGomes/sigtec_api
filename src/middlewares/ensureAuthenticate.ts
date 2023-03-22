@@ -14,7 +14,7 @@ export function ensureAuthenticate(request: Request, response: Response, next: N
 
     try {
         verify(token, "sigdigital")
-        console.log("ok")
+        //verificar se está ativo
         return next()
     } catch(error) {
         return response.status(401).json({

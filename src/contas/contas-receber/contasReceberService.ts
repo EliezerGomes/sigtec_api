@@ -8,9 +8,8 @@ export class ContasReceberService {
 
         const contas = Array()
 
-
         contasReceber.map((data) => {
-            const dataFormatada = moment(data.DATA!).format('YYYY-MM-DD')
+            const dataFormatada = moment(data.DATA).add(1, 'day').format('YYYY-MM-DD')
 
             contas.push({
                 ...data,
